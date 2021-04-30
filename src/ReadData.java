@@ -48,6 +48,10 @@ public class ReadData {
         }
     }
 
+    public double manhattanDistance(){
+
+    }
+
     public static void main(String[] args) {
         try{
             ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
