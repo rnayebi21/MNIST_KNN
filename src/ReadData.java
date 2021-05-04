@@ -48,6 +48,22 @@ public class ReadData {
         }
     }
 
+    public int[][] returnImage(int numImages) throws IOException{
+        int [] result = new int [784];
+        for (int i = 0; i < 4; i++){
+            readInt(images);
+        }
+        for (int i = 0; i < 2; i++){
+            readInt(labels);
+        }
+        for (int i = 0; i < 784; i++){
+            result[i] = images.read();
+        }
+        int [][] end = {result, [labels.read()]};
+        return
+    }
+
+
     public double manhattanDistance(){
 
     }
@@ -55,7 +71,11 @@ public class ReadData {
     public static void main(String[] args) {
         try{
             ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
-            test.getImages(10);
+
+            for (int i = 0; i < 60000; i++){
+
+            }
+
         }
         catch(IOException e){
             System.out.println("RIP");
