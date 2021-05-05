@@ -7,7 +7,7 @@ public class ReadData {
     private FileInputStream images;
     private FileInputStream labels;
     private boolean tracing = false;
-
+    public Image [] totalData = new Image[60000];
     public ReadData(String imageFileName, String labelFileName) throws IOException{
         this.images = new FileInputStream(imageFileName);
         this.labels = new FileInputStream(labelFileName);
@@ -17,7 +17,9 @@ public class ReadData {
         for (int i = 0; i < 2; i++){
             readInt(labels);
         }
-
+        for (int i = 0; i < totalData.length; i++){
+            totalData[i] = getOneImage();
+        }
     }
 
     public class Image {
@@ -48,17 +50,13 @@ public class ReadData {
         return result;
 
     }
-    public void getAllImages() throws IOException{
-        getImages(60000);
-    }
 
+//    public void getAllImages() throws IOException{
+//        getImages(60000);
+//    }
+
+    //for printing things out
     public void getImages(int numImages) throws IOException{
-        for (int i = 0; i < 4; i++){
-            readInt(images);
-        }
-        for (int i = 0; i < 2; i++){
-            readInt(labels);
-        }
 
         for(int i = 0; i<numImages; i++){
             for(int r = 0;r<28;r++){
@@ -71,6 +69,15 @@ public class ReadData {
             System.out.println();
 
         }
+    }
+
+    public Image getOneImage() throws IOException{
+        int [] arr = new int [784];
+        for(int i = 0; i<784; i++){
+            arr[i] = images.read();
+        }
+        Image result = new Image(arr);
+        return result;
     }
 /*
     public int[][] returnImage() throws IOException{
@@ -102,10 +109,7 @@ public class ReadData {
     public static void main(String[] args) {
         try{
             ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
-
-            for (int i = 0; i < 60000; i++){
-
-            }
+            ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte");
 
         }
         catch(IOException e){
