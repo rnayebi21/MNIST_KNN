@@ -1,5 +1,5 @@
 public class KNN {
-    public KNN(){
+    public KNN(int numNeighbors){
 
     }
 }
