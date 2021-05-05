@@ -13,8 +13,29 @@ public class ReadData {
         this.labels = new FileInputStream(labelFileName);
     }
 
+    public class Image {
+        int [] raw;
+        public Image(int [] raw) throws IOException{
+            this.raw = raw;
+            for (int i = 0; i < 4; i++){
+                readInt(images);
+            }
+            for (int i = 0; i < 784; i++){
+                raw[i] = images.read();
+            }
+        }
+
+        public double sum(){
+            double total = 0;
+            for (int i = 0; i < this.raw.length; i++){
+                total+=this.raw[i];
+            }
+            return total;
+        }
+    }
+
     //Mr. Paige's method
-    private int readInt(InputStream input) throws IOException{
+    public int readInt(InputStream input) throws IOException{
         int result = 0;
         for (int i = 0; i < 4; i++){
             int value = input.read();
@@ -47,11 +68,41 @@ public class ReadData {
 
         }
     }
+/*
+    public int[][] returnImage() throws IOException{
+        int [] result = new int [784];
+        for (int i = 0; i < 4; i++){
+            readInt(images);
+        }
+        for (int i = 0; i < 2; i++){
+            readInt(labels);
+        }
+        for (int i = 0; i < 784; i++){
+            result[i] = images.read();
+        }
+        int [] thing = {labels.read()};
+        int [][] end = {result, thing};
+        return end;
+    }
+*/
+
+    public double manhattanDistance(Image i1, Image i2){
+//        return Math.pow(i1.sum() - i2.sum(), 2);
+        double result = 0;
+        for (int i = 0; i < i1.raw.length; i++){
+            result += Math.sqrt(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2));
+        }
+        return result/i1.raw.length;
+    }
 
     public static void main(String[] args) {
         try{
             ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
-            test.getImages(10);
+
+            for (int i = 0; i < 60000; i++){
+
+            }
+
         }
         catch(IOException e){
             System.out.println("RIP");
