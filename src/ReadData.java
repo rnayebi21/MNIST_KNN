@@ -47,7 +47,7 @@ public class ReadData {
 //                    String update =
 //                    result = String.format(update, "%4s");
 //                    result += this.raw[index] + "\t\t";
-                    result += String.format(this.raw[index], )
+                    result += String.format("%3d",this.raw[index] );
                 }
                 result+= "\n";
             }
