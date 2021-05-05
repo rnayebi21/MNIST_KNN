@@ -38,6 +38,21 @@ public class ReadData {
             }
             return total;
         }
+
+        public String toString(){
+            String result = "";
+            for(int r = 0;r<28;r++){
+                for(int c = 0; c<28; c++){
+                    int index = 28*r + c;
+//                    String update =
+//                    result = String.format(update, "%4s");
+//                    result += this.raw[index] + "\t\t";
+                    result += String.format(this.raw[index], )
+                }
+                result+= "\n";
+            }
+            return result;
+        }
     }
 
     //Mr. Paige's method
@@ -110,7 +125,7 @@ public class ReadData {
         try{
             ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
             ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte");
-
+            System.out.println(train.totalData[1]);
         }
         catch(IOException e){
             System.out.println("RIP");
