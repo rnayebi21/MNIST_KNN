@@ -11,15 +11,19 @@ public class ReadData {
     public ReadData(String imageFileName, String labelFileName) throws IOException{
         this.images = new FileInputStream(imageFileName);
         this.labels = new FileInputStream(labelFileName);
+        for (int i = 0; i < 4; i++){
+            readInt(images);
+        }
+        for (int i = 0; i < 2; i++){
+            readInt(labels);
+        }
+
     }
 
     public class Image {
         int [] raw;
         public Image(int [] raw) throws IOException{
             this.raw = raw;
-            for (int i = 0; i < 4; i++){
-                readInt(images);
-            }
             for (int i = 0; i < 784; i++){
                 raw[i] = images.read();
             }
@@ -86,11 +90,11 @@ public class ReadData {
     }
 */
 
-    public double manhattanDistance(Image i1, Image i2){
+    public double distance(Image i1, Image i2){
 //        return Math.pow(i1.sum() - i2.sum(), 2);
         double result = 0;
         for (int i = 0; i < i1.raw.length; i++){
-            result += Math.sqrt(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2));
+            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
         }
         return result/i1.raw.length;
     }
