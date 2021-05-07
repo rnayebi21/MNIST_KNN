@@ -20,7 +20,7 @@ public class ReadData {
         }
         System.out.println("loading data.... this may take a couple minutes");
         for (int i = 0; i < totalImageData.length; i++){
-            totalImageData[i] = getOneImage();
+            totalImageData[i] = getOneImage(i);
             totalLabels[i] = labels.read();
             int inc = 6000;
             if(i%inc ==0){
@@ -58,8 +58,10 @@ public class ReadData {
 
     public class Image {
         int [] raw;
-        public Image(int [] raw) throws IOException{
+        int index;
+        public Image(int [] raw, int index) throws IOException{
             this.raw = raw;
+            this.index = index;
             for (int i = 0; i < 784; i++){
                 raw[i] = images.read();
             }
@@ -71,6 +73,10 @@ public class ReadData {
                 total+=this.raw[i];
             }
             return total;
+        }
+        
+        public int getIndex(){
+            return this.index;
         }
 
         public String toString(){
@@ -88,6 +94,23 @@ public class ReadData {
             return result;
         }
     }
+    
+    //getter method to get training data at an index
+    public Image getImage (int index){
+        return totalImageData[index];
+    }
+    
+    //same for labels
+    public int getLabel(int index){
+        return totalLabels[index];
+    }
+    
+    //getter method for dimension of training data in case bc i dont like hard coded stuff
+    public int getDimenson(){
+        return this.totalImageData.length;
+    }
+    
+    
 
     //Mr. Paige's method
     public int readInt(InputStream input) throws IOException{
@@ -119,12 +142,12 @@ public class ReadData {
         }
     }
 
-    public Image getOneImage() throws IOException{
+    public Image getOneImage(int index) throws IOException{
         int [] arr = new int [784];
         for(int i = 0; i<784; i++){
             arr[i] = images.read();
         }
-        Image result = new Image(arr);
+        Image result = new Image(arr, index);
         return result;
     }
 /*
