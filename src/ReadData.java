@@ -9,18 +9,23 @@ public class ReadData {
     private boolean tracing = false;
     public Image [] totalImageData = new Image[60000];
     public int [] totalLabels = new int[60000];
-    public ReadData(String imageFileName, String labelFileName) throws IOException{
+    public ReadData(String imageFileName, String labelFileName, boolean debug) throws IOException{
         this.images = new FileInputStream(imageFileName);
         this.labels = new FileInputStream(labelFileName);
         for (int i = 0; i < 4; i++){
-            readInt(images);
+            System.out.println(readInt(images));
         }
         for (int i = 0; i < 2; i++){
-            readInt(labels);
+            System.out.println(readInt(labels));
         }
         System.out.println("loading data.... this may take a couple minutes");
         for (int i = 0; i < totalImageData.length; i++){
-            totalImageData[i] = getOneImage(i);
+            if (debug && i == 100){
+                break;
+            }
+//            System.out.println(i);
+            totalImageData[i] = getOneImage();
+//            System.out.println(totalImageData[i]);
             totalLabels[i] = labels.read();
             int inc = 6000;
             if(i%inc ==0){
@@ -58,10 +63,8 @@ public class ReadData {
 
     public class Image {
         int [] raw;
-        int index;
-        public Image(int [] raw, int index) throws IOException{
+        public Image(int [] raw) throws IOException{
             this.raw = raw;
-            this.index = index;
             for (int i = 0; i < 784; i++){
                 raw[i] = images.read();
             }
@@ -73,10 +76,6 @@ public class ReadData {
                 total+=this.raw[i];
             }
             return total;
-        }
-        
-        public int getIndex(){
-            return this.index;
         }
 
         public String toString(){
@@ -94,23 +93,6 @@ public class ReadData {
             return result;
         }
     }
-    
-    //getter method to get training data at an index
-    public Image getImage (int index){
-        return totalImageData[index];
-    }
-    
-    //same for labels
-    public int getLabel(int index){
-        return totalLabels[index];
-    }
-    
-    //getter method for dimension of training data in case bc i dont like hard coded stuff
-    public int getDimenson(){
-        return this.totalImageData.length;
-    }
-    
-    
 
     //Mr. Paige's method
     public int readInt(InputStream input) throws IOException{
@@ -123,10 +105,7 @@ public class ReadData {
 
     }
 
-//    public void getAllImages() throws IOException{
-//        getImages(60000);
-//    }
-
+/*
     //for printing things out
     public void getImages(int numImages) throws IOException{
 
@@ -141,13 +120,15 @@ public class ReadData {
             System.out.println();
         }
     }
+ */
 
-    public Image getOneImage(int index) throws IOException{
+    public Image getOneImage() throws IOException{
         int [] arr = new int [784];
         for(int i = 0; i<784; i++){
             arr[i] = images.read();
         }
-        Image result = new Image(arr, index);
+        Image result = new Image(arr);
+//        System.out.println(result);
         return result;
     }
 /*
@@ -180,12 +161,25 @@ public class ReadData {
     public static void main(String[] args) {
         try{
 //            ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
-            ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte");
+            ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte", true);
+
+            for (int i = 0; i < 50; i++){
+                System.out.println(train.totalImageData[i]);
+                System.out.println("label :" + train.totalLabels[i]);
+            }
+//            System.out.println();
+//            for (int i = 0; i < 50; i++){
+//
+//            }
+            /*
+            System.out.println(train.totalImageData[0]);
+            System.out.println("label: " + train.totalLabels[0]);
             System.out.println(train.totalImageData[1]);
             System.out.println("label: " + train.totalLabels[1]);
-            System.out.println();
-            System.out.println(train.totalImageData[751]);
-            System.out.println("label: " + train.totalLabels[751]);
+             */
+//            System.out.println();
+//            System.out.println(train.totalImageData[751]);
+//            System.out.println("label: " + train.totalLabels[751]);
 //            System.out.println("748: " + train.totalLabels[748]);
 //            System.out.println("749: " + train.totalLabels[749]);
 //            System.out.println("750: " + train.totalLabels[750]);
