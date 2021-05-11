@@ -23,9 +23,7 @@ public class ReadData {
             if (debug && i == 100){
                 break;
             }
-//            System.out.println(i);
-            totalImageData[i] = getOneImage();
-//            System.out.println(totalImageData[i]);
+            totalImageData[i] = getOneImage(i);
             totalLabels[i] = labels.read();
             int inc = 6000;
             if(i%inc ==0){
@@ -61,11 +59,34 @@ public class ReadData {
         System.out.println("done!");
     }
 
+    public Image getImage (int index){
+        return totalImageData[index];
+    }
+
+    //same for labels
+    public int getLabel(int index){
+        return totalLabels[index];
+    }
+
+
+
+    //getter method for dimension of training data in case bc i dont like hard coded stuff
+    public int getDimenson(){
+        return this.totalImageData.length;
+    }
+
     public class Image {
+        int index;
         int [] raw;
-        public Image(int [] raw) throws IOException{
+        public Image(int [] raw, int index) throws IOException{
             this.raw = raw;
+            this.index = index;
         }
+
+        public int getIndex(){
+            return this.index;
+        }
+
 
         public double sum(){
             double total = 0;
@@ -75,14 +96,15 @@ public class ReadData {
             return total;
         }
 
+        public Image getImage(int index){
+            return totalImageData[index];
+        }
+
         public String toString(){
             String result = "";
             for(int r = 0;r<28;r++){
                 for(int c = 0; c<28; c++){
                     int index = 28*r + c;
-//                    String update =
-//                    result = String.format(update, "%4s");
-//                    result += this.raw[index] + "\t\t";
                     result += String.format("%3d",this.raw[index] );
                 }
                 result+= "\n";
@@ -102,87 +124,37 @@ public class ReadData {
 
     }
 
-/*
-    //for printing things out
-    public void getImages(int numImages) throws IOException{
-
-        for(int i = 0; i<numImages; i++){
-            for(int r = 0;r<28;r++){
-                for(int c = 0; c<28; c++){
-                    System.out.printf("%4s", images.read());
-                }
-                System.out.println();
-            }
-            System.out.println("label: " + labels.read());
-            System.out.println();
-        }
-    }
- */
-
-    public Image getOneImage() throws IOException{
+    public Image getOneImage(int index) throws IOException{
         int [] arr = new int [784];
         for(int i = 0; i<784; i++){
             arr[i] = images.read();
         }
-        Image result = new Image(arr);
-//        System.out.println(result);
+        Image result = new Image(arr, index);
         return result;
     }
-/*
-    public int[][] returnImage() throws IOException{
-        int [] result = new int [784];
-        for (int i = 0; i < 4; i++){
-            readInt(images);
-        }
-        for (int i = 0; i < 2; i++){
-            readInt(labels);
-        }
-        for (int i = 0; i < 784; i++){
-            result[i] = images.read();
-        }
-        int [] thing = {labels.read()};
-        int [][] end = {result, thing};
-        return end;
-    }
-*/
 
     public double distance(Image i1, Image i2){
 //        return Math.pow(i1.sum() - i2.sum(), 2);
         double result = 0;
         for (int i = 0; i < i1.raw.length; i++){
-            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
+//            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
+//            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
+            result += Math.pow(i1.raw[i] -i2.raw[i], 2);
         }
         return result/i1.raw.length;
     }
 
     public static void main(String[] args) {
         try{
-//            ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
             ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte", true);
-
-            for (int i = 0; i < 50; i++){
-                System.out.print(train.totalImageData[i]);
-                System.out.println("label :" + train.totalLabels[i] + "\n");
-            }
-//            System.out.println();
 //            for (int i = 0; i < 50; i++){
-//
+//                System.out.print(train.totalImageData[i]);
+//                System.out.println("label :" + train.totalLabels[i] + "\n");
 //            }
-            /*
-            System.out.println(train.totalImageData[0]);
-            System.out.println("label: " + train.totalLabels[0]);
-            System.out.println(train.totalImageData[1]);
-            System.out.println("label: " + train.totalLabels[1]);
-             */
-//            System.out.println();
-//            System.out.println(train.totalImageData[751]);
-//            System.out.println("label: " + train.totalLabels[751]);
-//            System.out.println("748: " + train.totalLabels[748]);
-//            System.out.println("749: " + train.totalLabels[749]);
-//            System.out.println("750: " + train.totalLabels[750]);
-//            System.out.println("752: " + train.totalLabels[752]);
-//            System.out.println("753: " + train.totalLabels[753]);
-//            System.out.println("754: " + train.totalLabels[754]);
+            KNN test = new KNN(1, train);
+            System.out.println(test.findLabel(train.totalImageData[0]));
+            System.out.println(train.totalLabels[0]);
+
         }
         catch(IOException e){
             System.out.println("RIP");
