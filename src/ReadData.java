@@ -65,9 +65,6 @@ public class ReadData {
         int [] raw;
         public Image(int [] raw) throws IOException{
             this.raw = raw;
-            for (int i = 0; i < 784; i++){
-                raw[i] = images.read();
-            }
         }
 
         public double sum(){
@@ -164,8 +161,8 @@ public class ReadData {
             ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte", true);
 
             for (int i = 0; i < 50; i++){
-                System.out.println(train.totalImageData[i]);
-                System.out.println("label :" + train.totalLabels[i]);
+                System.out.print(train.totalImageData[i]);
+                System.out.println("label :" + train.totalLabels[i] + "\n");
             }
 //            System.out.println();
 //            for (int i = 0; i < 50; i++){
