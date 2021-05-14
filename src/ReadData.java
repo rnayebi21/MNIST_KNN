@@ -129,6 +129,11 @@ public class ReadData {
         for(int i = 0; i<784; i++){
             arr[i] = images.read();
         }
+//        System.out.println("index " + index);
+//        System.out.println("array: ");
+//        for(int i = 0; i < arr.length; i++){
+//            System.out.println(arr[i]);
+//        }
         Image result = new Image(arr, index);
         return result;
     }
@@ -138,22 +143,72 @@ public class ReadData {
         double result = 0;
         for (int i = 0; i < i1.raw.length; i++){
 //            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
-//            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
-            result += Math.pow(i1.raw[i] -i2.raw[i], 2);
+            result += Math.sqrt(Math.abs(Math.pow(i1.raw[i], 2) - Math.pow(i2.raw[i], 2)));
+            //result += Math.pow(i1.raw[i] -i2.raw[i], 2);
         }
         return result/i1.raw.length;
     }
 
+    public boolean check(int actual, int test){
+        boolean result = (actual == test);
+        return result;
+    }
+
     public static void main(String[] args) {
         try{
-            ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte", true);
+            ReadData train = new ReadData("train-images.idx3-ubyte", "train-labels.idx1-ubyte", false);
+            ReadData test = new ReadData("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte", false);
 //            for (int i = 0; i < 50; i++){
 //                System.out.print(train.totalImageData[i]);
 //                System.out.println("label :" + train.totalLabels[i] + "\n");
 //            }
-            KNN test = new KNN(1, train);
-            System.out.println(test.findLabel(train.totalImageData[0]));
-            System.out.println(train.totalLabels[0]);
+            KNN attempt = new KNN(100, train);
+            int totalCorrect = 0;
+            int total = 10000;
+            for (int i = 0; i < total; i++){
+                int predicted = attempt.findLabel(test.totalImageData[i]);
+                int actual = test.totalLabels[i];
+                //System.out.println("actual: " + actual + " predicted: " + predicted);
+                if (test.check(actual, predicted)){
+                    totalCorrect++;
+
+                }
+                int inc = total;
+                if(i%inc ==0){
+                    if (i == inc){
+                        System.out.print("10%...");
+                    }
+                    else if (i == 2*inc){
+                        System.out.print("20%...");
+                    }
+                    else if (i == 3*inc){
+                        System.out.print("30%...");
+                    }
+                    else if (i == 4*inc){
+                        System.out.print("40%...");
+                    }
+                    else if (i == 5*inc){
+                        System.out.print("50%...");
+                    }
+                    else if (i == 6*inc){
+                        System.out.print("60%...");
+                    }
+                    else if (i == 7*inc){
+                        System.out.print("70%...");
+                    }
+                    else if (i == 8*inc){
+                        System.out.print("80%...");
+                    }
+                    else if (i == 9*inc){
+                        System.out.print("90%...");
+                    }
+                }
+            }
+
+            System.out.println(((totalCorrect*1.0)/total)* 100 + "%");
+//            System.out.println(train.totalImageData[0]);
+//            System.out.println(test.findLabel(train.totalImageData[0]));
+//            System.out.println(train.totalLabels[0]);
 
         }
         catch(IOException e){

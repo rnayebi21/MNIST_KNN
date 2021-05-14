@@ -26,7 +26,7 @@ public class KNN {
                 double distA = data.distance(a, img);
                 double distB = data.distance(b, img);
 
-                if (distA<distB)return -1;//A is closer to B therefore a= -1
+                if (distA>distB)return -1;//A is closer to B therefore a= -1
                 else if (distA == distB)return 0;//distances are equal
                 else return 1; //a is greater than b so farther away
             }
@@ -42,7 +42,11 @@ public class KNN {
                 continue;
                 //this is just to make sure there is stuff in the PQ
             }
+//            System.out.println("i: " + i);
+//            System.out.println("data: " + data.getImage(i));
+//            System.out.println("img: " + img);
           double dist = data.distance(data.getImage(i), img);
+
 
         //if dist< queue.max, add it to queue and get rid of max
         if(dist< data.distance(img,queue.peek())){
@@ -52,7 +56,7 @@ public class KNN {
 
         }
         //find majority of nearest neighbors to pick label
-         int[] counts = new int[numNeighbors];
+         int[] counts = new int[10];
         for(ReadData.Image i: queue){
             int label = data.getLabel(i.getIndex());
             assert label>=0;
